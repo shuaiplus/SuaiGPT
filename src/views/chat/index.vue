@@ -482,10 +482,18 @@ onUnmounted(() => {
           :class="[isMobile ? 'p-2' : 'p-4']"
         >
           <template v-if="!dataSources.length">
-            <div class="flex items-center justify-center mt-4 text-center text-neutral-300">
-              <SvgIcon icon="ri:bubble-chart-fill" class="mr-2 text-3xl" />
-              <span>Aha~</span>
-            </div>
+           
+					 
+<p style="text-align: center;">&nbsp;</p>
+<p style="text-align: center;"><span style="font-size: 24pt; color: #ababab;"><strong>欢迎使用</strong><strong>ShuaiGpt</strong><strong>！</strong></span></p>
+<p style="text-align: center;"><span style="font-size: 16pt; color: #ababab;"><strong>此项目通过调用GPT-3.5 Turbo Api实现</strong></span></p>
+<p style="text-align: center;"><span style="font-size: 16pt; color: #ababab;"><strong>目前提供免费试用，用爱发电！</strong></span></p>
+<p style="text-align: center;"><span style="font-size: 16pt; color: #ababab;"><strong>如果喜欢，可以给我买瓶水避避暑😊</strong></span></p>
+<iframe src="https://pay.shuai.plus" style="overflow-x:hidden;overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;"  frameborder="0" scrolling="no"></iframe>
+<hr />
+<p style="text-align: center;"><span style="font-size: 16pt; color: #ababab;"><strong>注：被官方限制了，一分钟最多对话三次😥</strong></span></p>
+<p style="text-align: center;"><span style="font-size: 16pt; color: #ababab;"><strong>如果报错，请息怒，稍等片刻再使用</strong></span></p>
+
           </template>
           <template v-else>
             <div>
