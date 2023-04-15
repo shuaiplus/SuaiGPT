@@ -57,8 +57,9 @@ onMounted(() => {
           ，免费且基于 MIT 协议，没有任何形式的付费行为！
         </p>
         <p>
-          如果你觉得此项目对你有帮助，请在 GitHub 帮我点个 Star 或者给予一点赞助，谢谢！
+         如果你觉得此项目对你有帮助，请给我买个面包，快饿死了我，谢谢！
         </p>
+				<iframe src="https://pay.shuai.plus/" style="overflow-x:hidden;overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;"  frameborder="0" scrolling="no"></iframe>
       </div>
       <p>{{ $t("setting.api") }}：{{ config?.apiModel ?? '-' }}</p>
       <p v-if="isChatGPTAPI">
