@@ -15,12 +15,13 @@ export interface UserState {
 export function defaultSetting(): UserState {
   return {
     userInfo: {
-      avatar: 'https://raw.githubusercontent.com/Chanzhaoyu/chatgpt-web/main/src/assets/avatar.jpg',
-      name: 'ChenZhaoYu',
-      description: 'Star on <a href="https://github.com/Chanzhaoyu/chatgpt-bot" class="text-blue-500" target="_blank" >GitHub</a>',
+      avatar: 'https://pic.imgdb.cn/item/642d2cbaa682492fcc12dfbe.png',
+      name: 'ShuaiGPT.US',
+      description: '欢迎访问SuaiGPT！',
     },
   }
 }
+
 
 export function getLocalState(): UserState {
   const localSetting: UserState | undefined = ss.get(LOCAL_NAME)
