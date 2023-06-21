@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import type { Ref } from 'vue'
+import 类型 { Ref } from 'vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
@@ -16,9 +16,9 @@ import { useChatStore, usePromptStore } from '@/store'
 import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
 
-let controller = new AbortController()
+let controller = 新建 AbortController()
 
-const openLongReply = import.meta.env.VITE_GLOB_OPEN_LONG_REPLY === 'true'
+const openLongReply = import。meta。env。VITE_GLOB_OPEN_LONG_REPLY === 'true'
 
 const route = useRoute()
 const dialog = useDialog()
@@ -34,7 +34,7 @@ const { usingContext, toggleUsingContext } = useUsingContext()
 const { uuid } = route.params as { uuid: string }
 
 const dataSources = computed(() => chatStore.getChatByUuid(+uuid))
-const conversationList = computed(() => dataSources.value.filter(item => (!item.inversion && !!item.conversationOptions)))
+const conversationList = computed(() => dataSources.value。filter(item => (!item.inversion && !!item.conversationOptions)))
 
 const prompt = ref<string>('')
 const loading = ref<boolean>(false)
@@ -47,7 +47,7 @@ const promptStore = usePromptStore()
 const { promptList: promptTemplate } = storeToRefs<any>(promptStore)
 
 // 未知原因刷新页面，loading 状态不会重置，手动重置
-dataSources.value.forEach((item, index) => {
+dataSources.value。forEach((item, index) => {
   if (item.loading)
     updateChatSome(+uuid, index, { loading: false })
 })
@@ -65,17 +65,17 @@ async function onConversation() {
   if (!message || message.trim() === '')
     return
 
-  controller = new AbortController()
+  controller = 新建 AbortController()
 
   addChat(
     +uuid,
     {
-      dateTime: new Date().toLocaleString(),
+      dateTime: 新建 日期()。toLocaleString(),
       text: message,
       inversion: true,
       error: false,
       conversationOptions: null,
-      requestOptions: { prompt: message, options: null },
+      requestOptions: { prompt: message, 选项: null },
     },
   )
   scrollToBottom()
@@ -83,8 +83,8 @@ async function onConversation() {
   loading.value = true
   prompt.value = ''
 
-  let options: Chat.ConversationRequest = {}
-  const lastContext = conversationList.value[conversationList.value.length - 1]?.conversationOptions
+  let 选项: Chat.ConversationRequest = {}
+  const lastContext = conversationList.value[conversationList.value。length - 1]?.conversationOptions
 
   if (lastContext && usingContext.value)
     options = { ...lastContext }
@@ -92,13 +92,13 @@ async function onConversation() {
   addChat(
     +uuid,
     {
-      dateTime: new Date().toLocaleString(),
+      dateTime: 新建 日期()。toLocaleString(),
       text: '',
       loading: true,
       inversion: false,
       error: false,
       conversationOptions: null,
-      requestOptions: { prompt: message, options: { ...options } },
+      requestOptions: { prompt: message, 选项: { ...options } },
     },
   )
   scrollToBottom()
@@ -108,9 +108,9 @@ async function onConversation() {
     const fetchChatAPIOnce = async () => {
       await fetchChatAPIProcess<Chat.ConversationResponse>({
         prompt: message,
-        options,
+        选项,
         signal: controller.signal,
-        onDownloadProgress: ({ event }) => {
+        onDownloadProgress: ({ 事件 }) => {
           const xhr = event.target
           const { responseText } = xhr
           // Always process the final line
@@ -122,19 +122,19 @@ async function onConversation() {
             const data = JSON.parse(chunk)
             updateChat(
               +uuid,
-              dataSources.value.length - 1,
+              dataSources.value。length - 1,
               {
-                dateTime: new Date().toLocaleString(),
+                dateTime: 新建 日期()。toLocaleString(),
                 text: lastText + (data.text ?? ''),
                 inversion: false,
                 error: false,
                 loading: true,
                 conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
-                requestOptions: { prompt: message, options: { ...options } },
+                requestOptions: { prompt: message, 选项: { ...options } },
               },
             )
 
-            if (openLongReply && data.detail.choices[0].finish_reason === 'length') {
+            if (openLongReply && data.detail。choices[0]。finish_reason === 'length') {
               options.parentMessageId = data.id
               lastText = data.text
               message = ''
@@ -148,7 +148,7 @@ async function onConversation() {
           }
         },
       })
-      updateChatSome(+uuid, dataSources.value.length - 1, { loading: false })
+      updateChatSome(+uuid, dataSources.value。length - 1, { loading: false })
     }
 
     await fetchChatAPIOnce()
@@ -159,7 +159,7 @@ async function onConversation() {
     if (error.message === 'canceled') {
       updateChatSome(
         +uuid,
-        dataSources.value.length - 1,
+        dataSources.value。length - 1,
         {
           loading: false,
         },
@@ -168,12 +168,12 @@ async function onConversation() {
       return
     }
 
-    const currentChat = getChatByUuidAndIndex(+uuid, dataSources.value.length - 1)
+    const currentChat = getChatByUuidAndIndex(+uuid, dataSources.value。length - 1)
 
     if (currentChat?.text && currentChat.text !== '') {
       updateChatSome(
         +uuid,
-        dataSources.value.length - 1,
+        dataSources.value。length - 1,
         {
           text: `${currentChat.text}\n[${errorMessage}]`,
           error: false,
@@ -185,15 +185,15 @@ async function onConversation() {
 
     updateChat(
       +uuid,
-      dataSources.value.length - 1,
+      dataSources.value。length - 1,
       {
-        dateTime: new Date().toLocaleString(),
+        dateTime: 新建 日期()。toLocaleString(),
         text: errorMessage,
         inversion: false,
         error: true,
         loading: false,
         conversationOptions: null,
-        requestOptions: { prompt: message, options: { ...options } },
+        requestOptions: { prompt: message, 选项: { ...options } },
       },
     )
     scrollToBottomIfAtBottom()
@@ -207,16 +207,16 @@ async function onRegenerate(index: number) {
   if (loading.value)
     return
 
-  controller = new AbortController()
+  controller = 新建 AbortController()
 
   const { requestOptions } = dataSources.value[index]
 
   let message = requestOptions?.prompt ?? ''
 
-  let options: Chat.ConversationRequest = {}
+  let 选项: Chat.ConversationRequest = {}
 
-  if (requestOptions.options)
-    options = { ...requestOptions.options }
+  if (requestOptions.选项)
+    options = { ...requestOptions.选项 }
 
   loading.value = true
 
@@ -224,13 +224,13 @@ async function onRegenerate(index: number) {
     +uuid,
     index,
     {
-      dateTime: new Date().toLocaleString(),
+      dateTime: 新建 日期()。toLocaleString(),
       text: '',
       inversion: false,
       error: false,
       loading: true,
       conversationOptions: null,
-      requestOptions: { prompt: message, options: { ...options } },
+      requestOptions: { prompt: message, 选项: { ...options } },
     },
   )
 
@@ -239,9 +239,9 @@ async function onRegenerate(index: number) {
     const fetchChatAPIOnce = async () => {
       await fetchChatAPIProcess<Chat.ConversationResponse>({
         prompt: message,
-        options,
+        选项,
         signal: controller.signal,
-        onDownloadProgress: ({ event }) => {
+        onDownloadProgress: ({ 事件 }) => {
           const xhr = event.target
           const { responseText } = xhr
           // Always process the final line
@@ -255,17 +255,17 @@ async function onRegenerate(index: number) {
               +uuid,
               index,
               {
-                dateTime: new Date().toLocaleString(),
+                dateTime: 新建 日期()。toLocaleString(),
                 text: lastText + (data.text ?? ''),
                 inversion: false,
                 error: false,
                 loading: true,
                 conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
-                requestOptions: { prompt: message, options: { ...options } },
+                requestOptions: { prompt: message, 选项: { ...options } },
               },
             )
 
-            if (openLongReply && data.detail.choices[0].finish_reason === 'length') {
+            if (openLongReply && data.detail。choices[0]。finish_reason === 'length') {
               options.parentMessageId = data.id
               lastText = data.text
               message = ''
@@ -299,13 +299,13 @@ async function onRegenerate(index: number) {
       +uuid,
       index,
       {
-        dateTime: new Date().toLocaleString(),
+        dateTime: 新建 日期()。toLocaleString(),
         text: errorMessage,
         inversion: false,
         error: true,
         loading: false,
         conversationOptions: null,
-        requestOptions: { prompt: message, options: { ...options } },
+        requestOptions: { prompt: message, 选项: { ...options } },
       },
     )
   }
@@ -319,7 +319,7 @@ function handleExport() {
     return
 
   const d = dialog.warning({
-    title: t('chat.exportImage'),
+    标题: t('chat.exportImage'),
     content: t('chat.exportImageConfirm'),
     positiveText: t('common.yes'),
     negativeText: t('common.no'),
@@ -332,18 +332,18 @@ function handleExport() {
         })
         const imgUrl = canvas.toDataURL('image/png')
         const tempLink = document.createElement('a')
-        tempLink.style.display = 'none'
+        tempLink.style。display = 'none'
         tempLink.href = imgUrl
         tempLink.setAttribute('download', 'chat-shot.png')
-        if (typeof tempLink.download === 'undefined')
+        if (typeof tempLink.下载 === 'undefined')
           tempLink.setAttribute('target', '_blank')
 
-        document.body.appendChild(tempLink)
+        document.内容。appendChild(tempLink)
         tempLink.click()
-        document.body.removeChild(tempLink)
-        window.URL.revokeObjectURL(imgUrl)
+        document.内容。removeChild(tempLink)
+        window.URL。revokeObjectURL(imgUrl)
         d.loading = false
-        ms.success(t('chat.exportSuccess'))
+        ms.成功(t('chat.exportSuccess'))
         Promise.resolve()
       }
       catch (error: any) {
@@ -361,7 +361,7 @@ function handleDelete(index: number) {
     return
 
   dialog.warning({
-    title: t('chat.deleteMessage'),
+    标题: t('chat.deleteMessage'),
     content: t('chat.deleteMessageConfirm'),
     positiveText: t('common.yes'),
     negativeText: t('common.no'),
@@ -376,7 +376,7 @@ function handleClear() {
     return
 
   dialog.warning({
-    title: t('chat.clearChat'),
+    标题: t('chat.clearChat'),
     content: t('chat.clearChatConfirm'),
     positiveText: t('common.yes'),
     negativeText: t('common.no'),
@@ -386,15 +386,15 @@ function handleClear() {
   })
 }
 
-function handleEnter(event: KeyboardEvent) {
+function handleEnter(事件: KeyboardEvent) {
   if (!isMobile.value) {
-    if (event.key === 'Enter' && !event.shiftKey) {
+    if (event.密钥 === 'Enter' && !event.shiftKey) {
       event.preventDefault()
       handleSubmit()
     }
   }
   else {
-    if (event.key === 'Enter' && event.ctrlKey) {
+    if (event.密钥 === 'Enter' && event.ctrlKey) {
       event.preventDefault()
       handleSubmit()
     }
@@ -412,10 +412,10 @@ function handleStop() {
 // 搜索选项计算，这里使用value作为索引项，所以当出现重复value时渲染异常(多项同时出现选中效果)
 // 理想状态下其实应该是key作为索引项,但官方的renderOption会出现问题，所以就需要value反renderLabel实现
 const searchOptions = computed(() => {
-  if (prompt.value.startsWith('/')) {
-    return promptTemplate.value.filter((item: { key: string }) => item.key.toLowerCase().includes(prompt.value.substring(1).toLowerCase())).map((obj: { value: any }) => {
+  if (prompt.value。startsWith('/')) {
+    return promptTemplate.value。filter((item: { 密钥: string }) => item.密钥。toLowerCase()。includes(prompt.value。substring(1)。toLowerCase()))。map((obj: { value: any }) => {
       return {
-        label: obj.value,
+        标签: obj.value,
         value: obj.value,
       }
     })
@@ -426,10 +426,10 @@ const searchOptions = computed(() => {
 })
 
 // value反渲染key
-const renderOption = (option: { label: string }) => {
+const renderOption = (option: { 标签: string }) => {
   for (const i of promptTemplate.value) {
-    if (i.value === option.label)
-      return [i.key]
+    if (i.value === option.标签)
+      return [i.密钥]
   }
   return []
 }
@@ -441,7 +441,7 @@ const placeholder = computed(() => {
 })
 
 const buttonDisabled = computed(() => {
-  return loading.value || !prompt.value || prompt.value.trim() === ''
+  return loading.value || !prompt.value || prompt.value。trim() === ''
 })
 
 const footerClass = computed(() => {
@@ -485,8 +485,6 @@ onUnmounted(() => {
 <p style="text-align: center;"><span style="font-size: 24pt; color: #ababab;"><strong>欢迎使用</strong><strong>ShuaiGpt</strong><strong>！</strong></span></p>
 <p style="text-align: center;"><span style="font-size: 16pt; color: #ababab;"><strong>此项目通过调用GPT-3.5 Turbo Api实现</strong></span></p>
 <p style="text-align: center;"><span style="font-size: 16pt; color: #ababab;"><strong>目前提供免费试用，用爱发电！</strong></span></p>
-<p style="text-align: center;"><span style="font-size: 16pt; color: #ababab;"><strong>如果喜欢，可以给我买瓶水避避暑😊</strong></span></p>
-<iframe src="https://pay.shuai.plus" style="overflow-x:hidden;overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;"  frameborder="0" scrolling="no"></iframe>
 <hr />
 <p style="text-align: center;"><span style="font-size: 16pt; color: #ababab;"><strong>注：被官方限制了，一分钟最多对话三次😥</strong></span></p>
 <p style="text-align: center;"><span style="font-size: 16pt; color: #ababab;"><strong>如果报错，请息怒，稍等片刻再使用</strong></span></p>
@@ -506,7 +504,7 @@ onUnmounted(() => {
                 @delete="handleDelete(index)"
               />
               <div class="sticky bottom-0 left-0 flex justify-center">
-                <NButton v-if="loading" type="warning" @click="handleStop">
+                <NButton v-if="loading" 类型="warning" @click="handleStop">
                   <template #icon>
                     <SvgIcon icon="ri:stop-circle-line" />
                   </template>
@@ -541,7 +539,7 @@ onUnmounted(() => {
               <NInput
                 ref="inputRef"
                 v-model:value="prompt"
-                type="textarea"
+                类型="textarea"
                 :placeholder="placeholder"
                 :autosize="{ minRows: 1, maxRows: isMobile ? 4 : 8 }"
                 @input="handleInput"
@@ -551,7 +549,7 @@ onUnmounted(() => {
               />
             </template>
           </NAutoComplete>
-          <NButton type="primary" :disabled="buttonDisabled" @click="handleSubmit">
+          <NButton 类型="primary" :disabled="buttonDisabled" @click="handleSubmit">
             <template #icon>
               <span class="dark:text-black">
                 <SvgIcon icon="ri:send-plane-fill" />
